@@ -39,10 +39,6 @@ class MainGame(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.isGameRunning = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    player_dir = self.player.getDirection()
-                    print map.ray(self.player.posX, self.player.posY, player_dir[0], player_dir[1])
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
@@ -60,6 +56,7 @@ class MainGame(object):
 
         self.display.renderWindow.fill(0)
         self.renderPerspectiveMap()
+        self.renderFpsCounter()
         pygame.display.update()
 
         self.delta_time = (self.start_time - self.end_time) / 1000.0
@@ -92,5 +89,9 @@ class MainGame(object):
             if start_angle + 1 > player_angle and start_angle - 1 < player_angle:
                 self.min_dist = dist
 
-            print color_shade
             pygame.draw.rect(self.display.renderWindow, color, (screenX, screenY, 1, height), 1)
+
+    def renderFpsCounter(self):
+        myfont = pygame.font.SysFont("monospace", 15)
+        label = myfont.render("FPS: " + str(int(self.fps)), 1, (255, 0, 0))
+        self.display.renderWindow.blit(label, (0, 0))
